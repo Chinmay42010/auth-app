@@ -73,7 +73,7 @@ export default function SignupPage() {
             <button
                 onClick={onSignup}
                 disabled={buttonDisabled}
-                className="p-2 border border-blue-100 rounded-md focus:outline-none focus:border-blue-400 cursor-pointer bg-blue-800 hover:bg-blue-400 transform transition duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-blue-400 hover:bg-blue-700 text-white rounded-md py-1 px-2 duration-300"
             >
                 {loading ? "Signing up..." : "Signup"}
             </button>
