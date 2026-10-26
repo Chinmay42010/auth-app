@@ -30,7 +30,16 @@ export default function ProfilePage() {
     const getUserDetails = async () => {
         const res = await axios.get("/api/users/me");
         console.log(res.data);
-        setData(res.data.data._id);
+        // API returns { message: "User found", data: user, token }
+        // Show user ID safely, fallback to error message
+        if (res.data && res.data.data && res.data.data._id) {
+            setData(res.data.data._id);
+        } else if (res.data && res.data.token) {
+            // Fallback: show first part of token if no _id available
+            setData("token:" + res.data.token.slice(0, 20) + "...");
+        } else {
+            setData("Error: User data not found");
+        }
     };
 
     return (

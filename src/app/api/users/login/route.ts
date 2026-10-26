@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
             status: 200,
         });
 
-        response.cookies.set("token", token, { httpOnly: true });
+        response.cookies.set("token", token, { httpOnly: false });
 
         return response;
         // Check if the passord is correct
