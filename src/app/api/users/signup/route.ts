@@ -4,9 +4,9 @@ import { sendEmail } from "@/src/helpers/mailer";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 
-await connect();
 export async function POST(request: NextRequest) {
     try {
+        await connect();
         const reqBody = await request.json();
 
         if (!reqBody?.email || !reqBody?.password || !reqBody?.username) {
@@ -40,12 +40,16 @@ export async function POST(request: NextRequest) {
 
         const savedUser = await newUser.save();
 
-        // Send verification email
-        await sendEmail({
-            email,
-            emailType: "VERIFY",
-            userId: savedUser._id,
-        });
+        // Verification email is best-effort: a mail outage should not fail signup
+        try {
+            await sendEmail({
+                email,
+                emailType: "VERIFY",
+                userId: savedUser._id,
+            });
+        } catch (mailError) {
+            console.error("Verification email failed:", mailError);
+        }
 
         const { password: _, ...userWithoutPassword } = savedUser.toObject();
 
